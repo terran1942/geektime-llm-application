@@ -42,6 +42,11 @@ def update_api_key(key: Optional[str] = None):
 api_key = st.sidebar.text_input("API_KEY", value=os.getenv("API_KEY", ""), key="API_KEY", type="password", on_change=update_api_key)
 update_api_key(api_key)
 
+draw_style = st.sidebar.selectbox(
+    '绘图风格',
+    ['写实', '二次元漫画', '科幻', '赛博朋克']
+)
+
 
 # 初始化
 if "history" not in st.session_state:
@@ -108,10 +113,9 @@ def draw_new_image():
     if not image_prompt:
         st.error("调用chatglm生成Cogview prompt出错")
         return
-    
-    # TODO: 加上风格选项
-    image_prompt = '二次元风格。' + image_prompt.strip()
-    
+
+    image_prompt = draw_style + '。' + image_prompt.strip()
+
     print(f"image_prompt = {image_prompt}")
     n_retry = 3
     st.markdown("正在生成图片，请稍等...")
